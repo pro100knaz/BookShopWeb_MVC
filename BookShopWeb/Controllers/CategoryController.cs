@@ -45,6 +45,7 @@ namespace BookShopWeb.Controllers
 			{
 				_Context.Categories.Add(obj);
 				_Context.SaveChanges();
+				TempData["success"] = "Category created successfully";
 				return RedirectToAction("Index", "Category");
 			}
 			return View();
@@ -71,6 +72,7 @@ namespace BookShopWeb.Controllers
 			{
 				_Context.Categories.Update(obj);
 				_Context.SaveChanges();
+				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index", "Category");
 			}
 			return View();
@@ -97,7 +99,7 @@ namespace BookShopWeb.Controllers
 
 			_Context.Categories.Remove(obj);
 			_Context.SaveChanges();
-
+			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index", "Category");
 		}
 	}
