@@ -10,28 +10,24 @@ using BookShopRazorWeb.Models;
 
 namespace BookShopRazorWeb.Pages.Categories
 {
+    [BindProperties]
     public class CreateModel : PageModel
     {
         private readonly BookShopRazorWeb.Data.ApplicationDbContext _context;
-        [BindProperty]
-        public Category Category { get; set; } = default!;
+        public Category Category { get; set; }
 
         public CreateModel(BookShopRazorWeb.Data.ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            return Page();
+
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             _context.Categories.Add(Category);
             await _context.SaveChangesAsync();
