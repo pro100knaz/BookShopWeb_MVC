@@ -30,7 +30,7 @@ namespace BookShopRazorWeb.Pages.Categories
 			{
 				_context.Categories.Update(Category);
 				_context.SaveChanges();
-				//TempData["success"] = "Category edited successfully";
+				TempData["success"] = "Category edited successfully";
 				return RedirectToPage("Category");
 			}
 

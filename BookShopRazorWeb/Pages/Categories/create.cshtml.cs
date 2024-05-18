@@ -28,10 +28,9 @@ namespace BookShopRazorWeb.Pages.Categories
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             _context.Categories.Add(Category);
             await _context.SaveChangesAsync();
-
+            TempData["success"] = "Category created successfully";
             return RedirectToPage("Category");
         }
     }

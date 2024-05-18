@@ -34,7 +34,7 @@ namespace BookShopRazorWeb.Pages.Categories
 
 			_context.Categories.Remove(obj);
 			await _context.SaveChangesAsync();
-			//TempData["success"] = "Category deleted successfully";
+			TempData["success"] = "Category deleted successfully";
 			return RedirectToPage("Category");
 		}
 	}
