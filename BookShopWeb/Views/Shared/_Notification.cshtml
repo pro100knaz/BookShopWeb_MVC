@@ -7,15 +7,13 @@
 	<script type="text/javascript">
 		toastr.success('@TempData["success"]')
 	</script>
-
+@* 
 	<div class="alert alert-dismissible alert-success">
-
-
 		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 		<strong>Well done!</strong>@TempData["success"]
 	</div>
 
-
+ *@
 }
 
 @if (TempData["error"] != null)
@@ -30,8 +28,8 @@
 	</script>
 
 
-	<div class="alert alert-dismissible alert-danger">
+	@* <div class="alert alert-dismissible alert-danger">
 		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 		<strong>WoW!</strong>@TempData["error"]
-	</div>
+	</div> *@
 }
