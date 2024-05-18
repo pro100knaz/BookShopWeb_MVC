@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BookShopWeb.Migrations
+namespace BookShop.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class _2 : Migration

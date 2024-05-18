@@ -1,4 +1,4 @@
-  using BookShopWeb.Data;
+  using BookShop.Models.Data;
   using Microsoft.EntityFrameworkCore;
 
   var builder = WebApplication.CreateBuilder(args);

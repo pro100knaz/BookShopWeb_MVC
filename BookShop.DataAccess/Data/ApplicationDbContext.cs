@@ -1,9 +1,8 @@
-﻿using BookShopWeb.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace BookShopWeb.Data
+namespace BookShop.Models.Data
 {
-	public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options){ }
 
@@ -17,8 +16,6 @@ namespace BookShopWeb.Data
 				new Category() {Id=3, Name = "History", DisplayOrder = 2},
 				new Category() {Id=4, Name = "Fantasy", DisplayOrder = 2}
 			);
-
-
 		}
 	}
 }

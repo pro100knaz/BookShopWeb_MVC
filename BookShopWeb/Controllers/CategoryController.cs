@@ -1,14 +1,12 @@
-﻿using BookShopWeb.Data;
-using BookShopWeb.Models;
+﻿using BookShop.Models;
+using BookShop.Models.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShopWeb.Controllers
 {
-	public class CategoryController : Controller
+    public class CategoryController : Controller
 	{
-
-
 
 		private readonly ApplicationDbContext _Context;
 
