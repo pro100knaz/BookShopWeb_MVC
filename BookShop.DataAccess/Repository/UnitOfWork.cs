@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using BookShop.DataAccess.Repository.IRepository;
-using BookShop.Models;
 using BookShop.Models.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.DataAccess.Repository
 {
-	public class CategoryRepository : Repository<Category>, ICategoryRepository
+	public class UnitOfWork : IUnitOfWork
 	{
+		public ICategoryRepository Category { get; private set; }
 		private readonly ApplicationDbContext _DbContext;
-		public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
+		public UnitOfWork(ApplicationDbContext dbContext)
 		{
 			_DbContext = dbContext;
+			Category = new CategoryRepository(dbContext);
 		}
 
-		public void Update(Category category)
+		public void Save()
 		{
-			_DbContext.Categories.Update(category);
+			_DbContext.SaveChanges();
 		}
 	}
 }

@@ -8,11 +8,13 @@ namespace BookShopWeb.Controllers
 {
     public class CategoryController : Controller
 	{
+		private readonly IUnitOfWork _UnitOfWork;
 		private readonly ICategoryRepository _CategoriesRepo;
 
-		public CategoryController(ICategoryRepository  categoriesRepo)
+		public CategoryController(IUnitOfWork  unitOfWork)
 		{
-			_CategoriesRepo = categoriesRepo;
+			_UnitOfWork = unitOfWork;
+			_CategoriesRepo = unitOfWork.Category;
 		}
 
 
@@ -42,7 +44,7 @@ namespace BookShopWeb.Controllers
 			if (ModelState.IsValid)
 			{
 				_CategoriesRepo.Add(obj);
-				_CategoriesRepo.Save();
+				_UnitOfWork.Save();
 				TempData["success"] = "Category created successfully";
 				return RedirectToAction("Index", "Category");
 			}
@@ -69,7 +71,7 @@ namespace BookShopWeb.Controllers
 			if (ModelState.IsValid)
 			{
 				_CategoriesRepo.Update(obj);
-				_CategoriesRepo.Save();
+				_UnitOfWork.Save();
 				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index", "Category");
 			}
@@ -96,7 +98,7 @@ namespace BookShopWeb.Controllers
 			var obj = _CategoriesRepo.Get(c => c.Id == id);
 
 			_CategoriesRepo.Delete(obj);
-			_CategoriesRepo.Save();
+			_UnitOfWork.Save();
 			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index", "Category");
 		}
