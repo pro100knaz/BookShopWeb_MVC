@@ -1,3 +1,5 @@
+  using BookShop.DataAccess.Repository;
+  using BookShop.DataAccess.Repository.IRepository;
   using BookShop.Models.Data;
   using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +14,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 	options => options.UseSqlServer(
 		builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,4 +1,5 @@
-﻿using BookShop.Models;
+﻿using BookShop.DataAccess.Repository.IRepository;
+using BookShop.Models;
 using BookShop.Models.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,18 +8,17 @@ namespace BookShopWeb.Controllers
 {
     public class CategoryController : Controller
 	{
+		private readonly ICategoryRepository _CategoriesRepo;
 
-		private readonly ApplicationDbContext _Context;
-
-		public CategoryController(ApplicationDbContext context)
+		public CategoryController(ICategoryRepository  categoriesRepo)
 		{
-			_Context = context;
+			_CategoriesRepo = categoriesRepo;
 		}
 
 
 		public IActionResult Index()
 		{
-			var objCategoryList = _Context.Categories.ToList();
+			var objCategoryList = _CategoriesRepo.GetAll().ToList();
 			return View(objCategoryList);
 		}
 
@@ -41,8 +41,8 @@ namespace BookShopWeb.Controllers
 			}
 			if (ModelState.IsValid)
 			{
-				_Context.Categories.Add(obj);
-				_Context.SaveChanges();
+				_CategoriesRepo.Add(obj);
+				_CategoriesRepo.Save();
 				TempData["success"] = "Category created successfully";
 				return RedirectToAction("Index", "Category");
 			}
@@ -57,7 +57,7 @@ namespace BookShopWeb.Controllers
 				return NotFound();
 			}
 
-			var category = _Context.Categories.Find(id) ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
+			var category = _CategoriesRepo.Get(c => c.Id == id);
 			//var category1 = _Context.Categories.FirstOrDefault(u => u.Id == id) ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
 			//var category2 = _Context.Categories.Where(u => u.Id == id).FirstOrDefault() ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
 			return View(category);
@@ -68,8 +68,8 @@ namespace BookShopWeb.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_Context.Categories.Update(obj);
-				_Context.SaveChanges();
+				_CategoriesRepo.Update(obj);
+				_CategoriesRepo.Save();
 				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index", "Category");
 			}
@@ -84,7 +84,7 @@ namespace BookShopWeb.Controllers
 				return NotFound();
 			}
 
-			var category = _Context.Categories.Find(id) ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
+			var category = _CategoriesRepo.Get(c => c.Id == id);
 			//var category1 = _Context.Categories.FirstOrDefault(u => u.Id == id) ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
 			//var category2 = _Context.Categories.Where(u => u.Id == id).FirstOrDefault() ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
 			return View(category);
@@ -93,10 +93,10 @@ namespace BookShopWeb.Controllers
 		[HttpPost, ActionName("Delete")]
 		public IActionResult DeletePOST(int id)
 		{
-			var obj = _Context.Categories.Find(id) ?? throw new ArgumentOutOfRangeException(nameof(id), "Категория с таким ид не существует");
+			var obj = _CategoriesRepo.Get(c => c.Id == id);
 
-			_Context.Categories.Remove(obj);
-			_Context.SaveChanges();
+			_CategoriesRepo.Delete(obj);
+			_CategoriesRepo.Save();
 			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index", "Category");
 		}
