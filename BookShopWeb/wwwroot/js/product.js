@@ -1,5 +1,4 @@
 ﻿var dataTable;
-
 $(document).ready(function () {
     loadDataTable();
 });
@@ -17,7 +16,7 @@ function loadDataTable() {
                 "render": function (data) {
                     return `<div class="w-75 btn-group" role="group">
                      <a href="/admin/product/upsert?id=${data}" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>               
-                     <a onClick=Delete('/admin/product/delete/${data}') class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+                   <a href="#" class="btn btn-danger mx-2" onclick="deleteProduct(${data})"><i class="bi bi-trash-fill"></i> Delete</a>      
                     </div>`
                 },
                 "width": "25%"
@@ -26,7 +25,30 @@ function loadDataTable() {
     });
 }
 
+  function deleteProduct(productId) {
+    const url = `/admin/product/delete/${productId}`;
+
+    fetch(url, {
+      method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            dataTable.ajax.reload();
+        alert('Product deleted successfully.');
+        // Дополнительно можно удалить элемент из DOM или обновить страницу
+      } else {
+        alert('Failed to delete the product.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred.');
+    });
+}
+
 function Delete(url) {
+
+
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -41,7 +63,6 @@ function Delete(url) {
                 url: url,
                 type: 'DELETE',
                 success: function (data) {
-                    dataTable.ajax.reload();
                     toastr.success(data.message);
                 }
             })

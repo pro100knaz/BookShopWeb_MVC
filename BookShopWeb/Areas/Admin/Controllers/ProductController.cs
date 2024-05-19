@@ -145,10 +145,9 @@ namespace BookShopWeb.Areas.Admin.Controllers
 			var objCategoryList = productRepository.GetAll(includeProperties: "Category").ToList();
 
 			return Json(new { data = objCategoryList });
-
 		}
 
-		
+
 		[HttpDelete]
 		public IActionResult Delete(int? id)
 		{
@@ -157,14 +156,19 @@ namespace BookShopWeb.Areas.Admin.Controllers
 			{
 				return Json(new { succes = false, message = "Error while deleting" });
 			}
-			var oldImagePath =
-						Path.Combine(_webHostEnvironment.WebRootPath, productToDelete.ImageUrl.TrimStart('\\'));
 
-
-			if (System.IO.File.Exists(oldImagePath))
+			if (productToDelete.ImageUrl is not null)
 			{
-				System.IO.File.Delete(oldImagePath);
+				var oldImagePath =
+						Path.Combine(_webHostEnvironment.WebRootPath, productToDelete.ImageUrl.TrimStart('\\')) ?? string.Empty;
+
+
+				if (System.IO.File.Exists(oldImagePath))
+				{
+					System.IO.File.Delete(oldImagePath);
+				}
 			}
+
 			unitOfWork.Products.Delete(productToDelete);
 			unitOfWork.Save();
 
