@@ -2,7 +2,7 @@
 
 
 
-<div class="card shadow border-0 mt-4">
+<div class="card shadow border-0 my-4">
 	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
 		<div class="row">
 			<div class="col-12 text-center">
@@ -23,14 +23,9 @@
 
 			<th>  Title </th>
 			<th>  Author </th>
-			<th>  Description </th>
 			<th>  ISBN </th>
 			<th> List Price </th>
-			<th>  Price </th>
-			<th>  Price 50 </th>
-			<th>  Price 100 </th>
-
-			
+			<th> Category </th>
 			<th> </th>
 			</thead>
 			<tbody>
@@ -39,12 +34,9 @@
 					<tr>
 						<td>@obj.Title</td>
 						<td>@obj.Author</td>
-						<td>@obj.Description</td>
 						<td>@obj.ISBN</td>
 						<td>@obj.ListPrice</td>
-						<td>@obj.Price</td>
-						<td>@obj.Price50</td>
-						<td>@obj.Price100</td>
+						<td></td>
 						<td>
 							<div class="w-75 btn-group" role="group">
 								<a asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-primary mx-2">

@@ -2,6 +2,7 @@
 using BookShop.DataAccess.Repository.IRepository;
 using BookShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookShopWeb.Areas.Admin.Controllers
 {
@@ -10,16 +11,24 @@ namespace BookShopWeb.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IProductRepository productRepository;
+        private readonly ICategoryRepository categoryRepository;
 
         public ProductController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             productRepository = unitOfWork.Products;
-        }
+            categoryRepository = unitOfWork.Category;
+
+		}
 
         public IActionResult Index()
         {
             var objCategoryList = productRepository.GetAll().ToList();
+            IEnumerable<SelectListItem> CategoryList = categoryRepository.GetAll().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
             return View(objCategoryList);
         }
 
