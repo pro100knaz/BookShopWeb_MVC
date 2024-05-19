@@ -14,17 +14,19 @@ namespace BookShopWeb.Areas.Admin.Controllers
 		private readonly IProductRepository productRepository;
 		private readonly ICategoryRepository categoryRepository;
 
-		public ProductController(IUnitOfWork unitOfWork)
+		private readonly IWebHostEnvironment _webHostEnvironment;
+		public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
 		{
 			this.unitOfWork = unitOfWork;
 			productRepository = unitOfWork.Products;
 			categoryRepository = unitOfWork.Category;
-
+			_webHostEnvironment = webHostEnvironment;
 		}
 
 		public IActionResult Index()
 		{
-			var objCategoryList = productRepository.GetAll().ToList();
+			var objCategoryList = productRepository.GetAll(includeProperties:"Category").ToList();
+
 			return View(objCategoryList);
 		}
 
@@ -62,7 +64,40 @@ namespace BookShopWeb.Areas.Admin.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				productRepository.Add(productVM.Product);
+				string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+				if (file is { })
+				{
+					string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+					string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+					if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+					{
+						//delete the old image
+						var oldImagePath =
+							Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+
+						if (System.IO.File.Exists(oldImagePath))
+						{
+							System.IO.File.Delete(oldImagePath);
+						}
+					}
+
+					using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+					{
+						file.CopyTo(fileStream);
+					}
+					productVM.Product.ImageUrl = @"\images\product\" + fileName;
+				}
+				if(productVM.Product.Id == 0)
+				{
+					productRepository.Add(productVM.Product);
+				}
+				else
+				{
+					productRepository.Update(productVM.Product);
+				}
+
 				unitOfWork.Save();
 				TempData["success"] = "Product created successfully";
 				return RedirectToAction("Index", "Product");
