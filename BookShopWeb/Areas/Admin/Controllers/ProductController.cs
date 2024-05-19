@@ -1,6 +1,7 @@
 ﻿using BookShop.DataAccess.Repository;
 using BookShop.DataAccess.Repository.IRepository;
 using BookShop.Models;
+using BookShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -24,25 +25,37 @@ namespace BookShopWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var objCategoryList = productRepository.GetAll().ToList();
-            IEnumerable<SelectListItem> CategoryList = categoryRepository.GetAll().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Id.ToString()
-            });
             return View(objCategoryList);
         }
 
         public IActionResult Create()
         {
-            return View();
+			IEnumerable<SelectListItem> CategoryList = categoryRepository.GetAll().Select(u => new SelectListItem
+			{
+				Text = u.Name,
+				Value = u.Id.ToString()
+			});
+
+
+
+            //ViewBag.CategoryList = CategoryList;
+            //ViewData["CategoryList"] = CategoryList;
+
+
+            ProductVM productVM = new()
+            {
+                CategoryList = CategoryList,
+                Product = new Product()
+            };
+			return View(productVM);
         }
 
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM obj)
         {
             if (ModelState.IsValid)
             {
-                productRepository.Add(obj);
+                productRepository.Add(obj.Product);
                 unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index", "Product");
