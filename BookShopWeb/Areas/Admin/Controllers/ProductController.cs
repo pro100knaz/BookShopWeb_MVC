@@ -25,7 +25,7 @@ namespace BookShopWeb.Areas.Admin.Controllers
 
 		public IActionResult Index()
 		{
-			var objCategoryList = productRepository.GetAll(includeProperties:"Category").ToList();
+			var objCategoryList = productRepository.GetAll(includeProperties: "Category").ToList();
 
 			return View(objCategoryList);
 		}
@@ -89,7 +89,7 @@ namespace BookShopWeb.Areas.Admin.Controllers
 					}
 					productVM.Product.ImageUrl = @"\images\product\" + fileName;
 				}
-				if(productVM.Product.Id == 0)
+				if (productVM.Product.Id == 0)
 				{
 					productRepository.Add(productVM.Product);
 				}
@@ -115,25 +115,63 @@ namespace BookShopWeb.Areas.Admin.Controllers
 
 		}
 
+		//public IActionResult Delete(int? id)
+		//{
+		//	if (id == null || id == 0)
+		//	{
+		//		return NotFound();
+		//	}
+		//	var product = productRepository.Get(c => c.Id == id);
+		//	return View(product);
+		//}
+
+		//[HttpPost, ActionName("Delete")]
+		//public IActionResult DeletePOST(int id)
+		//{
+		//	var obj = productRepository.Get(c => c.Id == id);
+
+		//	productRepository.Delete(obj);
+		//	unitOfWork.Save();
+		//	TempData["success"] = "Product deleted successfully";
+		//	return RedirectToAction("Index", "Product");
+		//}
+
+
+		#region API Calls
+
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+			var objCategoryList = productRepository.GetAll(includeProperties: "Category").ToList();
+
+			return Json(new { data = objCategoryList });
+
+		}
+
+		
+		[HttpDelete]
 		public IActionResult Delete(int? id)
 		{
-			if (id == null || id == 0)
+			var productToDelete = productRepository.Get(u => u.Id == id);
+			if (productToDelete == null)
 			{
-				return NotFound();
+				return Json(new { succes = false, message = "Error while deleting" });
 			}
-			var product = productRepository.Get(c => c.Id == id);
-			return View(product);
-		}
+			var oldImagePath =
+						Path.Combine(_webHostEnvironment.WebRootPath, productToDelete.ImageUrl.TrimStart('\\'));
 
-		[HttpPost, ActionName("Delete")]
-		public IActionResult DeletePOST(int id)
-		{
-			var obj = productRepository.Get(c => c.Id == id);
 
-			productRepository.Delete(obj);
+			if (System.IO.File.Exists(oldImagePath))
+			{
+				System.IO.File.Delete(oldImagePath);
+			}
+			unitOfWork.Products.Delete(productToDelete);
 			unitOfWork.Save();
-			TempData["success"] = "Product deleted successfully";
-			return RedirectToAction("Index", "Product");
+
+			return Json(new { succes = true, message = "Delete Successful" });
+
 		}
+
+		#endregion
 	}
 }
