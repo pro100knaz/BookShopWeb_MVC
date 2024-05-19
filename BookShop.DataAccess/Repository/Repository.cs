@@ -26,7 +26,8 @@ namespace BookShop.DataAccess.Repository
 
 		public IEnumerable<T> GetAll() => Items.ToList();
 
-		public T Get(Expression<Func<T, bool>> filter) => Items.Where(filter).FirstOrDefault();
+		public T Get(Expression<Func<T, bool>> filter) => Items.Where(filter).FirstOrDefault() 
+			?? throw new ArgumentOutOfRangeException("NOTHING");
 
 		public void Add(T entity) => DbSet.Add(entity);
 

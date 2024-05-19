@@ -53,7 +53,7 @@ namespace BookShopWeb.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
             {
@@ -80,7 +80,7 @@ namespace BookShopWeb.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
             {
