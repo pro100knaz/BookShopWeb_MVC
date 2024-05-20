@@ -1,8 +1,6 @@
 ﻿using BookShop.DataAccess.Repository.IRepository;
 using BookShop.Models;
-using BookShop.Models.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookShopWeb.Areas.Admin.Controllers
 {

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Models.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options){ }
 
@@ -12,7 +13,9 @@ namespace BookShop.Models.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Category>().HasData(
+			base.OnModelCreating(modelBuilder); //необходим для работы с IdentityDbContext
+
+            modelBuilder.Entity<Category>().HasData(
 				new Category() {Id=1, Name = "Action", DisplayOrder = 1},
 				new Category() {Id=2, Name = "SciFi	", DisplayOrder = 1},
 				new Category() {Id=3, Name = "History", DisplayOrder = 2},
